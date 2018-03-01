@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="listaTelefonica">
+
+<head>
+
+    <!-- <script src="assets/js/angular.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script>
+        angular.module("listaTelefonica", []);
+        angular.module("listaTelefonica").controller("listaTelefonicaCtrl",
+            function($scope) {
+                $scope.app = "Lista Telefonica";
+                $scope.contatos = [{
+                    nome: "Pedro",
+                    telefone: "99999-8888"
+                }, {
+                    nome: "Ana",
+                    telefone: "99999-8888"
+                }, {
+                    nome: "Carlos",
+                    telefone: "99999-8888"
+                }];
+
+                $scope.operadoras = [{
+                        nome: "Oi",
+                        codigo: 14,
+                        categoria: "Celular"
+                    }, {
+                        nome: "Vivo",
+                        codigo: 15,
+                        categoria: "Fixo"
+                    }, {
+                        nome: "Tim",
+                        codigo: 41,
+                        categoria: "Celular"
+                    },
+
+                    {
+                        nome: "GVT",
+                        codigo: 55,
+                        categoria: "Fixo"
+                    }
+                ];
+
+                $scope.classe1 = "selecionado";
+                $scope.classe2 = "selecionado";
+
+                $scope.adicionarContato = function(contato) {
+                    $scope.contatos.push(angular.copy(contato));
+                    delete $scope.contato;
+                };
+
+            });
+    </script>
+
+    <style>
+        .jumbotron {
+            width: 450px;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .table {
+            margin-top: 10px;
+        }
+        
+        .selecionado {
+            background-color: #00cec9;
+        }
+    </style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<!-- ng-bind: Saída de dados, trás variáveis, obj do scope pros elementos -->
+
+<body ng-controller="listaTelefonicaCtrl">
+
+    <div class="container bg-light">
+        <h3>{{app}}</h3>
+        {{contatos}}
+        <table class="table table-striped">
+            <tr>
+                <th>Escolha</th>
+                <th>Nome</th>
+                <th>Telefone</th>
+            </tr>
+
+            <!-- percorre os elementos de um array de um escopo -->
+            <tr ng-class="{selecionado: contato.selecionado}" ng-repeat="contato in contatos">
+                <!-- contato escopo, contatos: array -->
+                <td><input type="checkbox" ng-model="contato.selecionado" /></td>
+                <td>{{contato.nome}}</td>
+                <td>{{contato.telefone}}</td>
+            </tr>
+
+            <!--
+        <tr ng-repeat="contato in contatos">
+
+            <td ng-repeat="(key, value) in contato">
+                {{key + ' - ' + value}}
+            </td>
+        </tr>
+    -->
+
+        </table>
+
+        <hr>
+
+        <input class="form-control" type="text" ng-model="contato.nome" placeholder="João da Silva" />
+        <input class="form-control" type="text" ng-model="contato.telefone" placeholder="15 99999-8888" />
+        <select ng-model="contato.operadora" ng-options="operadora.codigo as operadora.nome group by operadora.categoria for operadora in operadoras"> <!-- escopo, array --> 
+            
+        </select>
+        <p> {{contato}} </p>
+
+
+        <button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)" ng-disabled="!contato.nome || !contato.telefone">Adicionar Contato</button>
+        <br/>
+    </div>
+
+
+</body>
+
+</html>
