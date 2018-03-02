@@ -17,13 +17,16 @@
                 $scope.app = "Lista Telefonica";
                 $scope.contatos = [{
                     nome: "Pedro",
-                    telefone: "99999-8888"
+                    telefone: "99999-8888",
+                    cor: "#ff7f50"
                 }, {
                     nome: "Ana",
-                    telefone: "99999-8888"
+                    telefone: "5656565-8888",
+                    cor: "#5352ed"
                 }, {
                     nome: "Carlos",
-                    telefone: "99999-8888"
+                    telefone: "99999-8888",
+                    cor: "#ffa502"
                 }];
 
                 $scope.operadoras = [{
@@ -55,6 +58,26 @@
                     delete $scope.contato;
                 };
 
+
+                $scope.apagarContatos = function(contatos) {
+                    $scope.contatos = contatos.filter(function(contato) {
+                        if (!contato.selecionado) return contato;
+                    });
+                };
+
+
+
+
+                $scope.isContatoSelecionado = function(contatos) {
+                    return contatos.some(function(contato) {
+                        return contato.selecionado;
+                    });
+
+                };
+
+
+
+
             });
     </script>
 
@@ -73,6 +96,15 @@
         .selecionado {
             background-color: #00cec9;
         }
+        
+        .negrito {
+            font-weight: bolder;
+        }
+        
+        #caixaCategoria {
+            width: 20px;
+            height: 20px;
+        }
     </style>
 
     <meta charset="UTF-8">
@@ -86,20 +118,26 @@
 
     <div class="container bg-light">
         <h3>{{app}}</h3>
-        {{contatos}}
+
         <table class="table table-striped">
             <tr>
                 <th>Escolha</th>
                 <th>Nome</th>
                 <th>Telefone</th>
+                <th>Operadora</th>
+                <th>Categoria</th>
             </tr>
 
             <!-- percorre os elementos de um array de um escopo -->
-            <tr ng-class="{selecionado: contato.selecionado}" ng-repeat="contato in contatos">
+            <tr ng-class="{'selecionado negrito': contato.selecionado}" ng-repeat="contato in contatos">
                 <!-- contato escopo, contatos: array -->
                 <td><input type="checkbox" ng-model="contato.selecionado" /></td>
                 <td>{{contato.nome}}</td>
                 <td>{{contato.telefone}}</td>
+                <td>{{contato.operadoras.nome}}</td>
+                <td>
+                    <div id="caixaCategoria" ng-style="{'background-color': contato.cor}"></div>
+                </td>
             </tr>
 
             <!--
@@ -124,8 +162,18 @@
 
 
         <button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)" ng-disabled="!contato.nome || !contato.telefone">Adicionar Contato</button>
+        <button class="btn btn-danger btn-block" ng-click="apagarContatos(contatos)" ng-disabled="!isContatoSelecionado(contatos)">Apagar Contato</button>
+
+
+        <button class="btn btn-danger btn-block" ng-click="apagarContatos(contatos)" ng-show="isContatoSelecionado(contatos)">Apagar ex Hide</button>
+
+        <button class="btn btn-danger btn-block" ng-click="apagarContatos(contatos)" ng-if="isContatoSelecionado(contatos)">Apagar com IF  </button>
         <br/>
+
+        <div ng-include="'footer.html'"></div>
     </div>
+
+
 
 
 </body>
